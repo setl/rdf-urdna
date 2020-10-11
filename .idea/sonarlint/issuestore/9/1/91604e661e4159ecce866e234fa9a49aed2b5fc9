@@ -1,9 +1,0 @@
-
-R	java:S106"9Replace this use of System.out or System.err by a logger.(’¾ÿk8á¾‘Ğ.
-H	java:S108")Either remove or fill this block of code.(…¬å¿ıÿÿÿÿ8á¾‘Ğ.
-T
-java:S1144"9Remove this unused private "hashRelatedBlankNode" method.(© €“8á¾‘Ğ.
-Y
-java:S1117"9Rename "quads" which hides the field declared at line 49.(¢÷ä÷üÿÿÿÿ8á¾‘Ğ.
-R
-java:S3655"7Call "Optional#isPresent()" before accessing the value.(²íôÕ8Æ…ë‘Ğ.

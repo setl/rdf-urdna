@@ -1,4 +1,0 @@
-io/setl/rdf/normalization/PermutatorTest.java
- io.setl.rdf.normalization.PermutatorTest
-io/setl/rdf/normalization/UrdnaTest.java
- io.setl.rdf.normalization.UrdnaTest

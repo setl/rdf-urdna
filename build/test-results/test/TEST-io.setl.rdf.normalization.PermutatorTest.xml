@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.setl.rdf.normalization.PermutatorTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-10-08T15:44:10" hostname="IM00048" time="0.004">
-  <properties/>
-  <testcase name="test" classname="io.setl.rdf.normalization.PermutatorTest" time="0.004"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
