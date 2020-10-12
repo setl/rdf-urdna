@@ -10,6 +10,7 @@ import com.apicatalog.rdf.RdfValue;
 import com.apicatalog.rdf.lang.XsdConstants;
 
 /**
+ * Encode an RDF quad in N-Quad format. For cryptographic reasons the serialization is
  * @author Simon Greatrix on 06/10/2020.
  * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1. N-Quads</a>.
  */

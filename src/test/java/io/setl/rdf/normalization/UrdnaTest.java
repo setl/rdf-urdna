@@ -52,7 +52,7 @@ public class UrdnaTest extends TestCase {
       for (RdfResource name : dataOut.getGraphNames()) {
         checkGraph(name.getValue(), dataOut.getGraph(name).get(), processed.getGraph(name).get());
       }
-      System.out.println("Processing " + fileIn+ "   PASSED");
+      System.out.println("Processing " + fileIn + "   PASSED");
     }
   }
 

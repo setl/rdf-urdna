@@ -17,4 +17,5 @@ logs/
 log
 inspector.html
 .DS_Store
+.*.swp
 

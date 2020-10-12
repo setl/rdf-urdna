@@ -1,6 +1,6 @@
 package io.setl.rdf.normalization;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 
@@ -15,18 +15,19 @@ public class PermutatorTest {
 
   @Test
   public void test() {
-    Permutator permutator = new Permutator(new RdfResource[] {
+    Permutator permutator = new Permutator(new RdfResource[]{
         Rdf.createBlankNode("_:s"),
         Rdf.createBlankNode("_:e"),
         Rdf.createBlankNode("_:t"),
         Rdf.createBlankNode("_:l")
     });
     StringBuilder builder = new StringBuilder();
-    while(permutator.hasNext()) {
+    while (permutator.hasNext()) {
       builder.append(Arrays.toString(permutator.next()));
       builder.append("\n");
     }
-    assertEquals("[_:s, _:e, _:t, _:l]\n"
+    assertEquals(
+        "[_:s, _:e, _:t, _:l]\n"
             + "[_:e, _:s, _:t, _:l]\n"
             + "[_:t, _:s, _:e, _:l]\n"
             + "[_:s, _:t, _:e, _:l]\n"
@@ -50,7 +51,8 @@ public class PermutatorTest {
             + "[_:l, _:e, _:t, _:s]\n"
             + "[_:t, _:e, _:l, _:s]\n"
             + "[_:e, _:t, _:l, _:s]\n",
-        builder.toString());
+        builder.toString()
+    );
   }
 
 }

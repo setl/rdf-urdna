@@ -1,15 +1,77 @@
-plugins {
-    id 'java'
+buildscript {
+  repositories {
+    //Allow local repository for snapshot builds
+    if (version.endsWith("SNAPSHOT")) {
+      mavenLocal()
+      mavenCentral()
+    }
+    maven {
+      url "http://si-nexus01.dev.setl.io:8081/repository/maven-public/"
+      allowInsecureProtocol = true
+    }
+  }
+  dependencies {
+    classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
+    classpath "io.setl.gradle.plugins:setl-gradle-plugins:1.0.1"
+  }
 }
+
+
+plugins {
+  id 'checkstyle'
+  id "com.github.spotbugs" version "4.0.2"
+  id 'java'
+  id 'maven-publish'
+}
+
+apply plugin: "org.sonarqube"
+
+sourceCompatibility = 11
 
 group 'io.setl'
 version '1.0-SNAPSHOT'
 
 repositories {
+  //Allow local repository for snapshot builds
+  if (version.endsWith("SNAPSHOT")) {
+    mavenLocal()
     mavenCentral()
+  }
+  maven {
+    url "http://si-nexus01.dev.setl.io:8081/repository/maven-public/"
+    allowInsecureProtocol = true
+  }
 }
 
 dependencies {
-    compile group: 'com.apicatalog', name: 'titanium-json-ld', version: '0.8.5'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+  implementation group: 'com.apicatalog', name: 'titanium-json-ld', version: '0.8.5'
+  testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+// Checkstyle
+checkstyle {
+  toolVersion = "7.8.2"
+  configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+}
+
+// Publishing
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+  repositories {
+    maven {
+      credentials {
+        username = 'publisher'
+        password = 'publish'
+      }
+      if (version.endsWith("SNAPSHOT")) {
+        url 'http://si-nexus01.dev.setl.io:8081/repository/setl-snaps'
+      } else {
+        url 'http://si-nexus01.dev.setl.io:8081/repository/setl-libs'
+      }
+    }
+  }
 }

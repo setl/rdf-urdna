@@ -1,6 +1,8 @@
 package io.setl.rdf.normalization;
 
 /**
+ * The output of the Hash N-Degree Quad algorithm.
+ *
  * @author Simon Greatrix on 08/10/2020.
  */
 class NDegreeResult implements Comparable<NDegreeResult> {
@@ -21,6 +23,18 @@ class NDegreeResult implements Comparable<NDegreeResult> {
   }
 
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof NDegreeResult)) {
+      return false;
+    }
+    return getHash().equals(((NDegreeResult) o).getHash());
+  }
+
+
   public String getHash() {
     return hash;
   }
@@ -28,6 +42,12 @@ class NDegreeResult implements Comparable<NDegreeResult> {
 
   public IdentifierIssuer getIssuer() {
     return issuer;
+  }
+
+
+  @Override
+  public int hashCode() {
+    return getHash().hashCode();
   }
 
 }

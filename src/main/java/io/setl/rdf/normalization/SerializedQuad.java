@@ -23,6 +23,19 @@ public class SerializedQuad implements Comparable<SerializedQuad> {
   }
 
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof SerializedQuad)) {
+      return false;
+    }
+
+    return getSerialized().equals(((SerializedQuad) o).getSerialized());
+  }
+
+
   public RdfNQuad getQuad() {
     return quad;
   }
@@ -30,6 +43,12 @@ public class SerializedQuad implements Comparable<SerializedQuad> {
 
   public String getSerialized() {
     return serialized;
+  }
+
+
+  @Override
+  public int hashCode() {
+    return getSerialized().hashCode();
   }
 
 }
