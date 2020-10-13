@@ -16,7 +16,6 @@ buildscript {
   }
 }
 
-
 plugins {
   id 'checkstyle'
   id "com.github.spotbugs" version "4.0.2"
@@ -30,6 +29,10 @@ sourceCompatibility = 11
 
 group 'io.setl'
 version '1.0-SNAPSHOT'
+
+java {
+  withSourcesJar()
+}
 
 repositories {
   //Allow local repository for snapshot builds
@@ -64,8 +67,8 @@ publishing {
   repositories {
     maven {
       credentials {
-        username = 'publisher'
-        password = 'publish'
+        username = "$mavenUser"
+        password = "$mavenPassword"
       }
       if (version.endsWith("SNAPSHOT")) {
         url 'http://si-nexus01.dev.setl.io:8081/repository/setl-snaps'
