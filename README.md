@@ -5,5 +5,5 @@ This is an implementation of the Universal RDF Dataset Normalization Algorithm (
 Usage:
 
 ```
-   RdfDataset normalizedData = Urdna.normalize(rdfInput);
+   RdfDataset normalizedData = RdfNormalize.normalize(rdfInput);
 ```

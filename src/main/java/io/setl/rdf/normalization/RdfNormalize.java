@@ -23,13 +23,25 @@ import com.apicatalog.rdf.RdfResource;
 import com.apicatalog.rdf.RdfValue;
 
 /**
+ * Perform RDF normalization.
+ *
  * @author Simon Greatrix on 05/10/2020.
  */
-public class Urdna {
+public class RdfNormalize {
 
+  /**
+   * The lower-case hexadecimal alphabet.
+   */
   private static final char[] HEX = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 
+  /**
+   * Convert bytes to hexadecimal.
+   *
+   * @param data the bytes
+   *
+   * @return the data represented in hexadecimal.
+   */
   static String hex(byte[] data) {
     StringBuilder builder = new StringBuilder(data.length * 2);
     for (byte b : data) {
@@ -39,15 +51,40 @@ public class Urdna {
   }
 
 
+  /**
+   * Normalize an RDF dataset using the URDNA 2015 algorithm.
+   *
+   * @param input the dataset to be normalized
+   *
+   * @return a new normalized equivalent dataset.
+   */
   public static RdfDataset normalize(RdfDataset input) {
-    return new Urdna(input).doNormalize();
+    return new RdfNormalize(input).doNormalize();
   }
 
 
   /**
-   * The hash n-degree quads algorithm.
+   * Normalize an RDF dataset using the specified algorithm. NB. Currently only "URDNA2015" is supported.
+   *
+   * @param input     the dataset to be normalized
+   * @param algorithm the normalization algorithm
+   *
+   * @return a new normalized equivalent dataset.
    */
-  private class Hndq {
+  public static RdfDataset normalize(RdfDataset input, String algorithm) throws NoSuchAlgorithmException {
+    if (algorithm == null || algorithm.isBlank() || algorithm.equalsIgnoreCase("urdna2015")) {
+      // use default algorithm
+      return new RdfNormalize(input).doNormalize();
+    }
+
+    throw new NoSuchAlgorithmException("Normalization algorithm is not supported:" + algorithm);
+  }
+
+
+  /**
+   * The state information for the hash n-degree quads algorithm.
+   */
+  private class HashNDegreeQuads {
 
     /** The currently chosen identifier issuer. */
     IdentifierIssuer chosenIssuer = null;
@@ -56,7 +93,7 @@ public class Urdna {
     StringBuilder chosenPath = null;
 
     /** The data which will go into the hash. */
-    StringBuilder dataToHash = new StringBuilder();
+    final StringBuilder dataToHash = new StringBuilder();
 
 
     /**
@@ -233,23 +270,32 @@ public class Urdna {
 
 
 
+  /** Map of blank IDs to all the quads that reference that specific blank ID. */
   private final HashMap<RdfValue, RdfDataset> blankIdToQuadSet = new HashMap<>();
 
+  /** Issuer of canonical IDs to blank nodes. */
   private final IdentifierIssuer canonIssuer = new IdentifierIssuer("_:c14n");
 
+  /**
+   * Hash to associated IRIs.
+   */
   private final TreeMap<String, Set<RdfResource>> hashToBlankId = new TreeMap<>();
 
+  /** All the quads in the dataset to be processed. */
   private final List<RdfNQuad> quads;
 
+  /** An instance of the SHA-256 message digest algorithm. */
   private final MessageDigest sha256;
 
+  /** A set of non-normalized values. */
   private HashSet<RdfValue> nonNormalized;
 
 
-  private Urdna(RdfDataset input) {
+  private RdfNormalize(RdfDataset input) {
     try {
       sha256 = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
+      // The Java specification requires SHA-256 is included, so this should never happen.
       throw new InternalError("SHA-256 is not available", e);
     }
     quads = input.toList();
@@ -312,7 +358,7 @@ public class Urdna {
 
 
   private NDegreeResult hashNDegreeQuads(RdfResource id, IdentifierIssuer issuer) {
-    return new Hndq().hash(id, issuer);
+    return new HashNDegreeQuads().hash(id, issuer);
   }
 
 

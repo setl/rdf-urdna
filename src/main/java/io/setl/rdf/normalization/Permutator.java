@@ -14,8 +14,10 @@ class Permutator implements Iterator<RdfResource[]> {
 
   /** The array we are permuting. */
   private final RdfResource[] array;
+
   /** Counts for Heap's algorithm. */
   private final short[] count;
+
   /** Does another permutation exist?. */
   private boolean nextExists = true;
 

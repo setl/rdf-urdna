@@ -14,13 +14,21 @@ import com.apicatalog.rdf.RdfValue;
  */
 public class IdentifierIssuer {
 
+  /** Identifiers that have already been issued. */
   private final LinkedHashMap<RdfResource, RdfResource> existing = new LinkedHashMap<>();
 
+  /** The prefix for new identifiers. */
   private final String prefix;
 
+  /** Counter for creating new identifiers. */
   private int counter = 0;
 
 
+  /**
+   * Create a new instance.
+   *
+   * @param prefix the prefix for new identifiers.
+   */
   public IdentifierIssuer(String prefix) {
     this.prefix = prefix;
   }

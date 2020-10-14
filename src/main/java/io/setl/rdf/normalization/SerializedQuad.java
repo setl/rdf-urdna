@@ -3,6 +3,8 @@ package io.setl.rdf.normalization;
 import com.apicatalog.rdf.RdfNQuad;
 
 /**
+ * An RDF quad that has been serialized using the NQuad method.
+ *
  * @author Simon Greatrix on 08/10/2020.
  */
 public class SerializedQuad implements Comparable<SerializedQuad> {

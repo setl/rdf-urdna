@@ -10,9 +10,12 @@ import com.apicatalog.rdf.RdfResource;
 import com.apicatalog.rdf.RdfValue;
 
 /**
+ * Enumeration of positions in an RDF quad.
+ *
  * @author Simon Greatrix on 07/10/2020.
  */
 public enum Position {
+  /** The subject of the quad. */
   SUBJECT('s') {
     @Override
     public boolean isBlank(RdfNQuad quad) {
@@ -26,6 +29,8 @@ public enum Position {
     }
 
   },
+
+  /** The object of the quad. */
   OBJECT('o') {
     @Override
     RdfValue get(RdfNQuad quad) {
@@ -38,6 +43,8 @@ public enum Position {
       return quad.getObject().isBlankNode();
     }
   },
+
+  /** The graph the quad belongs to. */
   GRAPH('g') {
     @Override
     RdfValue get(RdfNQuad quad) {
@@ -51,6 +58,10 @@ public enum Position {
       return name.isPresent() && name.get().isBlankNode();
     }
   },
+
+  /**
+   * The predicate of the quad. Note the predicate is not used by the URDNA-2015 algorithm.
+   */
   PREDICATE('p') {
     @Override
     RdfValue get(RdfNQuad quad) {
@@ -65,8 +76,14 @@ public enum Position {
     }
   };
 
+  /**
+   * Set of positions in a quad which can be blank.
+   */
   public static final Set<Position> CAN_BE_BLANK = Collections.unmodifiableSet(EnumSet.of(Position.SUBJECT, Position.OBJECT, Position.GRAPH));
 
+  /**
+   * The tag used to represent the position in hashes.
+   */
   private final byte tag;
 
 
@@ -75,12 +92,31 @@ public enum Position {
   }
 
 
+  /**
+   * Get the value at this position in the quad.
+   *
+   * @param quad the quad
+   *
+   * @return the value at this position
+   */
   abstract RdfValue get(RdfNQuad quad);
 
 
+  /**
+   * Is the value at this position in the quad a blank node identifier?.
+   *
+   * @param quad the quad
+   *
+   * @return true if this position holds a blank node identifier.
+   */
   abstract boolean isBlank(RdfNQuad quad);
 
 
+  /**
+   * Get the tag to include in hashes to represent this position.
+   *
+   * @return the tag
+   */
   public byte tag() {
     return tag;
   }

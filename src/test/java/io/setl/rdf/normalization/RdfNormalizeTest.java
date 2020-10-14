@@ -1,5 +1,8 @@
 package io.setl.rdf.normalization;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
 import com.apicatalog.jsonld.http.media.MediaType;
@@ -9,7 +12,6 @@ import com.apicatalog.rdf.RdfGraph;
 import com.apicatalog.rdf.RdfNQuad;
 import com.apicatalog.rdf.RdfResource;
 import com.apicatalog.rdf.RdfTriple;
-import junit.framework.TestCase;
 import org.junit.Test;
 
 /**
@@ -17,7 +19,7 @@ import org.junit.Test;
  *
  * @author Simon Greatrix on 05/10/2020.
  */
-public class UrdnaTest extends TestCase {
+public class RdfNormalizeTest {
 
   private void checkGraph(String name, RdfGraph out, RdfGraph processed) {
     List<RdfTriple> triples = processed.toList();
@@ -41,10 +43,10 @@ public class UrdnaTest extends TestCase {
       String fileIn = String.format("test%03d-in.nq", i);
       String fileOut = String.format("test%03d-urdna2015.nq", i);
       System.out.println("Processing " + fileIn);
-      RdfDataset dataIn = Rdf.createReader(MediaType.N_QUADS, UrdnaTest.class.getClassLoader().getResourceAsStream(fileIn)).readDataset();
-      RdfDataset dataOut = Rdf.createReader(MediaType.N_QUADS, UrdnaTest.class.getClassLoader().getResourceAsStream(fileOut)).readDataset();
+      RdfDataset dataIn = Rdf.createReader(MediaType.N_QUADS, RdfNormalizeTest.class.getClassLoader().getResourceAsStream(fileIn)).readDataset();
+      RdfDataset dataOut = Rdf.createReader(MediaType.N_QUADS, RdfNormalizeTest.class.getClassLoader().getResourceAsStream(fileOut)).readDataset();
 
-      RdfDataset processed = Urdna.normalize(dataIn);
+      RdfDataset processed = RdfNormalize.normalize(dataIn);
 
       // processed and dataOut should be identical
       assertEquals("Canonical graph names should be identical", dataOut.getGraphNames(), processed.getGraphNames());
