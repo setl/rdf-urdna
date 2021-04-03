@@ -50,7 +50,7 @@ public class IdentifierIssuer {
    * @return the issuer to copy
    */
   public IdentifierIssuer copy() {
-    IdentifierIssuer newIssuer = new IdentifierIssuer(this.prefix);
+    IdentifierIssuer newIssuer = new IdentifierIssuer(prefix);
     newIssuer.existing.putAll(existing);
     newIssuer.counter = counter;
     return newIssuer;

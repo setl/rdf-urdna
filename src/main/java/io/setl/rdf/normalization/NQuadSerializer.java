@@ -164,7 +164,7 @@ public class NQuadSerializer {
     }
 
     if (object.isBlankNode()) {
-      builder.append(object.toString());
+      builder.append(object);
       return;
     }
 

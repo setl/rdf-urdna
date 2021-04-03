@@ -19,19 +19,25 @@ buildscript {
 plugins {
   id 'checkstyle'
   id "com.github.spotbugs" version "4.0.2"
+  id 'signing'
   id 'java'
   id 'maven-publish'
 }
 
 apply plugin: "org.sonarqube"
+apply plugin: 'maven'
 
 sourceCompatibility = 11
 
 group 'io.setl'
-version '1.0-SNAPSHOT'
+version '1.1-SNAPSHOT'
 
 java {
   withSourcesJar()
+}
+
+javadoc {
+    source = sourceSets.main.allJava
 }
 
 repositories {
@@ -47,7 +53,7 @@ repositories {
 }
 
 dependencies {
-  implementation group: 'com.apicatalog', name: 'titanium-json-ld', version: '0.8.5'
+  implementation group: 'com.apicatalog', name: 'titanium-json-ld', version: '1.0.0'
   testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
@@ -56,6 +62,22 @@ checkstyle {
   toolVersion = "7.8.2"
   configFile = rootProject.file('config/checkstyle/checkstyle.xml')
 }
+
+signing {
+  useGpgCmd()
+  sign configurations.archives
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
 
 // Publishing
 publishing {
@@ -74,6 +96,54 @@ publishing {
         url 'http://si-nexus01.dev.setl.io:8081/repository/setl-snaps'
       } else {
         url 'http://si-nexus01.dev.setl.io:8081/repository/setl-libs'
+      }
+    }
+  }
+}
+
+// Upload to Maven Central
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'Universal RDF Dataset Normalization Algorithm (2015) in Java'
+        packaging 'jar'
+        // optionally artifactId can be defined here
+        description 'An implementation of the URDNA-2015 algorithm which transforms any RDF dataset into a canonical form.'
+        url 'https://github.com/setl/rdf-urdna'
+
+        scm {
+          connection 'scm:git:https://github.com/setl/rdf-urdna.git'
+          developerConnection 'scm:git:https://github.com/setl/rdf-urdna.git'
+          url 'https://github.com/setl/rdf-urdna'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+
+        developers {
+          developer {
+            id 'simon-greatrix'
+            name 'Simon Greatrix'
+            email 'simon.greatrix@setl.io'
+            organization 'SETL'
+            organizationUrl 'https://setl.io'
+          }
+        }
       }
     }
   }

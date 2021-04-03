@@ -32,7 +32,7 @@ public class RdfNormalize {
   /**
    * The lower-case hexadecimal alphabet.
    */
-  private static final char[] HEX = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+  private static final char[] HEX = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 
   /**
@@ -67,9 +67,11 @@ public class RdfNormalize {
    * Normalize an RDF dataset using the specified algorithm. NB. Currently only "URDNA2015" is supported.
    *
    * @param input     the dataset to be normalized
-   * @param algorithm the normalization algorithm
+   * @param algorithm the normalization algorithm. If null or empty, URDNA2015 is assumed.
    *
    * @return a new normalized equivalent dataset.
+   *
+   * @throws NoSuchAlgorithmException if the algorithm is not known (i.e. not "URDNA2015")
    */
   public static RdfDataset normalize(RdfDataset input, String algorithm) throws NoSuchAlgorithmException {
     if (algorithm == null || algorithm.isBlank() || algorithm.equalsIgnoreCase("urdna2015")) {
@@ -86,14 +88,14 @@ public class RdfNormalize {
    */
   private class HashNDegreeQuads {
 
+    /** The data which will go into the hash. */
+    final StringBuilder dataToHash = new StringBuilder();
+
     /** The currently chosen identifier issuer. */
     IdentifierIssuer chosenIssuer = null;
 
     /** The currently chosen path. */
     StringBuilder chosenPath = null;
-
-    /** The data which will go into the hash. */
-    final StringBuilder dataToHash = new StringBuilder();
 
 
     /**

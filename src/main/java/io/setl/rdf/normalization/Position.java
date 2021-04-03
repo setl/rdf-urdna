@@ -79,7 +79,7 @@ public enum Position {
   /**
    * Set of positions in a quad which can be blank.
    */
-  public static final Set<Position> CAN_BE_BLANK = Collections.unmodifiableSet(EnumSet.of(Position.SUBJECT, Position.OBJECT, Position.GRAPH));
+  public static final Set<Position> CAN_BE_BLANK = Collections.unmodifiableSet(EnumSet.of(SUBJECT, OBJECT, GRAPH));
 
   /**
    * The tag used to represent the position in hashes.
