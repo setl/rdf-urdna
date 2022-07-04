@@ -35,7 +35,7 @@ public class IdentifierIssuer {
 
 
   /**
-   * Create a mapping in an other issuer for all identifiers issued by this, in the same order that they were issued by this.
+   * Create a mapping in another issuer for all identifiers issued by this, in the same order that they were issued by this.
    *
    * @param other the other identifier issuer.
    */

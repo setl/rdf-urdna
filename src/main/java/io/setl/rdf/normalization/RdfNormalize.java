@@ -74,7 +74,7 @@ public class RdfNormalize {
    * @throws NoSuchAlgorithmException if the algorithm is not known (i.e. not "URDNA2015")
    */
   public static RdfDataset normalize(RdfDataset input, String algorithm) throws NoSuchAlgorithmException {
-    if (algorithm == null || algorithm.isBlank() || algorithm.equalsIgnoreCase("urdna2015")) {
+    if (algorithm == null || algorithm.trim().isEmpty() || algorithm.equalsIgnoreCase("urdna2015")) {
       // use default algorithm
       return new RdfNormalize(input).doNormalize();
     }
@@ -163,7 +163,7 @@ public class RdfNormalize {
         appendToPath(related, pathBuilder, issuerCopy, recursionList);
 
         // 5.4.4.3: Is this path better than our chosen path?
-        if (chosenPath.length() > 0 && pathBuilder.compareTo(chosenPath) > 0) {
+        if (chosenPath.length() > 0 && pathBuilder.toString().compareTo(chosenPath.toString()) > 0) {
           // This is permutation is not going to make the best path, so skip the rest of it
           return;
         }
@@ -180,14 +180,14 @@ public class RdfNormalize {
             .append('>');
         issuerCopy = result.getIssuer();
 
-        if (chosenPath.length() > 0 && pathBuilder.compareTo(chosenPath) > 0) {
+        if (chosenPath.length() > 0 && pathBuilder.toString().compareTo(chosenPath.toString()) > 0) {
           // This is permutation is not going to make the best path, so skip the rest of it
           return;
         }
       }
 
       // 5.4.6: Do we have a new chosen path?
-      if (chosenPath.length() == 0 || pathBuilder.compareTo(chosenPath) < 0) {
+      if (chosenPath.length() == 0 || pathBuilder.toString().compareTo(chosenPath.toString()) < 0) {
         chosenPath.setLength(0);
         chosenPath.append(pathBuilder);
         chosenIssuer = issuerCopy;
@@ -213,7 +213,7 @@ public class RdfNormalize {
         chosenIssuer = null;
 
         // 5.4: For every possible permutation of the blank node list...
-        Permutator permutator = new Permutator(entry.getValue().toArray(RdfResource[]::new));
+        Permutator permutator = new Permutator(entry.getValue().toArray(new RdfResource[entry.getValue().size()]));
         while (permutator.hasNext()) {
           doPermutation(permutator.next(), issuer);
         }

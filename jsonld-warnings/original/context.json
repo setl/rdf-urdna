@@ -1,0 +1,20 @@
+{
+  "@context": {
+    "@protected": true,
+    "@version": 1.1,
+    "AgeConfirmation": {
+      "@context": {
+        "@protected": true,
+        "@version": 1.1,
+        "isOver21": {
+          "@id": "http://age.id/isOver21#indicator"
+        },
+        "subject": {
+          "@id": "http://age.id/isOver21#person",
+          "@type": "@id"
+        }
+      },
+      "@id": "http://age.id/credential/AgeConfirmation"
+    }
+  }
+}

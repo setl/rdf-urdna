@@ -1,0 +1,40 @@
+{
+  "@context": {
+    "3-Phase": "http://age.id/credential/AgeConfirmation",
+    "Gold++": "human:honest_joe",
+    "Verifiab1eCredential": {
+      "@context": {
+        "cred": "https://www.w3.org/2018/credentials#",
+        "credentialStatus": {
+          "@id": "cred:credentialStatus",
+          "@type": "@id"
+        },
+        "id": "@id",
+        "proof": {
+          "@container": "@graph",
+          "@id": "sec:proof",
+          "@type": "@id"
+        },
+        "sec": "https://w3id.org/security#",
+        "type": "@type",
+        "verification": {
+          "@context": {
+            "assessmentType": {
+              "@id": "@type",
+              "@type": "@id"
+            },
+            "gradeAchieved": {
+              "@id": "http://age.id/isOver21#person",
+              "@type": "@vocab"
+            },
+            "manuallyConfirmed": "http://age.id/isOver21#indicator"
+          },
+          "@id": "cred:credentialSubject",
+          "@type": "@id"
+        },
+        "xsd": "http://www.w3.org/2001/XMLSchema#"
+      },
+      "@id": "https://www.w3.org/2018/credentials#VerifiableCredential"
+    }
+  }
+}
