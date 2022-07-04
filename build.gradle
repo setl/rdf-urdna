@@ -29,7 +29,7 @@ apply plugin: 'maven'
 sourceCompatibility = 1.8
 
 group 'io.setl'
-version '1.2-SNAPSHOT'
+version '1.2'
 
 java {
   withSourcesJar()
