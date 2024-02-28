@@ -142,9 +142,7 @@ public class NQuadSerializer {
       throw new IllegalArgumentException();
     }
 
-    builder.append('<');
     builder.append(iri);
-    builder.append('>');
   }
 
 

@@ -59,7 +59,7 @@ public class RdfNormalize {
    * @return a new normalized equivalent dataset.
    */
   public static RdfDataset normalize(RdfDataset input) {
-    return new RdfNormalize(input).doNormalize();
+    return new RdfNormalize(input, null).doNormalize();
   }
 
 
@@ -76,7 +76,51 @@ public class RdfNormalize {
   public static RdfDataset normalize(RdfDataset input, String algorithm) throws NoSuchAlgorithmException {
     if (algorithm == null || algorithm.trim().isEmpty() || algorithm.equalsIgnoreCase("urdna2015")) {
       // use default algorithm
-      return new RdfNormalize(input).doNormalize();
+      return new RdfNormalize(input, null).doNormalize();
+    }
+
+    throw new NoSuchAlgorithmException("Normalization algorithm is not supported:" + algorithm);
+  }
+
+
+  /**
+   * Normalize an RDF dataset using the specified algorithm. NB. Currently only "URDNA2015" is supported.
+   *
+   * @param input     the dataset to be normalized
+   * @param mappings  input mappings for blank nodes
+   * @param algorithm the normalization algorithm. If null or empty, URDNA2015 is assumed.
+   *
+   * @return a new normalized equivalent dataset.
+   *
+   * @throws NoSuchAlgorithmException if the algorithm is not known (i.e. not "URDNA2015")
+   */
+  public static RdfDataset normalize(RdfDataset input, InputMappings mappings, String algorithm) throws NoSuchAlgorithmException {
+    if (algorithm == null || algorithm.trim().isEmpty() || algorithm.equalsIgnoreCase("urdna2015")) {
+      // use default algorithm
+      return new RdfNormalize(input, mappings).doNormalize();
+    }
+
+    throw new NoSuchAlgorithmException("Normalization algorithm is not supported:" + algorithm);
+  }
+
+
+  /**
+   * Normalize an RDF dataset using the specified algorithm. NB. Currently only "URDNA2015" is supported.
+   *
+   * @param input     the dataset to be normalized
+   * @param mappings  input mappings for blank nodes
+   * @param algorithm the normalization algorithm. If null or empty, URDNA2015 is assumed.
+   *
+   * @return a new normalized equivalent dataset.
+   *
+   * @throws NoSuchAlgorithmException if the algorithm is not known (i.e. not "URDNA2015")
+   */
+  public static RdfNormalizationResult normalizeFull(RdfDataset input, InputMappings mappings, String algorithm) throws NoSuchAlgorithmException {
+    if (algorithm == null || algorithm.trim().isEmpty() || algorithm.equalsIgnoreCase("urdna2015")) {
+      // use default algorithm
+      RdfNormalize normalize = new RdfNormalize(input, mappings);
+      RdfDataset dataset = normalize.doNormalize();
+      return new RdfNormalizationResult(dataset, mappings.getMappings(), normalize.canonIssuer.getMappings());
     }
 
     throw new NoSuchAlgorithmException("Normalization algorithm is not supported:" + algorithm);
@@ -276,7 +320,7 @@ public class RdfNormalize {
   private final HashMap<RdfValue, RdfDataset> blankIdToQuadSet = new HashMap<>();
 
   /** Issuer of canonical IDs to blank nodes. */
-  private final IdentifierIssuer canonIssuer = new IdentifierIssuer("_:c14n");
+  private final IdentifierIssuer canonIssuer;
 
   /**
    * Hash to associated IRIs.
@@ -293,7 +337,7 @@ public class RdfNormalize {
   private HashSet<RdfValue> nonNormalized;
 
 
-  private RdfNormalize(RdfDataset input) {
+  private RdfNormalize(RdfDataset input, InputMappings mappings) {
     try {
       sha256 = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
@@ -301,6 +345,7 @@ public class RdfNormalize {
       throw new InternalError("SHA-256 is not available", e);
     }
     quads = input.toList();
+    canonIssuer = new IdentifierIssuer("_:c14n").withMappings(mappings);
   }
 
 

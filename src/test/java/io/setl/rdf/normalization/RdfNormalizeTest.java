@@ -40,8 +40,8 @@ public class RdfNormalizeTest {
   @Test
   public void test() throws Exception {
     for (int i = 1; i <= 62; i++) {
-      String fileIn = String.format("test%03d-in.nq", i);
-      String fileOut = String.format("test%03d-urdna2015.nq", i);
+      String fileIn = String.format("urdna/test%03d-in.nq", i);
+      String fileOut = String.format("urdna/test%03d-urdna2015.nq", i);
       System.out.println("Processing " + fileIn);
       RdfDataset dataIn = Rdf.createReader(MediaType.N_QUADS, RdfNormalizeTest.class.getClassLoader().getResourceAsStream(fileIn)).readDataset();
       RdfDataset dataOut = Rdf.createReader(MediaType.N_QUADS, RdfNormalizeTest.class.getClassLoader().getResourceAsStream(fileOut)).readDataset();
