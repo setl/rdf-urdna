@@ -101,4 +101,20 @@ public class Rdfc10OfficialTest {
 
   }
 
+
+  @Test
+  public void testPoisonInput_Test74() throws Exception {
+    RdfDataset dataIn = Rdf.createReader(
+        MediaType.N_QUADS,
+        Rdfc10OfficialTest.class.getClassLoader().getResourceAsStream("rdfc10/test074-in.nq")
+    ).readDataset();
+    try {
+      RdfNormalize.normalize(dataIn);
+      fail("Expected exception");
+    } catch (MaxResourceExceeded e) {
+      e.printStackTrace();
+      // expected
+    }
+  }
+
 }

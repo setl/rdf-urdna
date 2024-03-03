@@ -48,6 +48,11 @@ public class InputMappings {
   }
 
 
+  /**
+   * Add name mappings. These are converted to blank nodes.
+   *
+   * @param nameMappings the name mappings
+   */
   public void addNameMappings(Map<String, String> nameMappings) {
     for (Map.Entry<String, String> entry : nameMappings.entrySet()) {
       add(Rdf.createBlankNode(entry.getKey()), Rdf.createBlankNode(entry.getValue()));
@@ -55,11 +60,22 @@ public class InputMappings {
   }
 
 
+  /**
+   * Add a single resource mapping. The resources should be blank nodes.
+   *
+   * @param key   the key
+   * @param value the value
+   */
   public void addResourceMapping(RdfResource key, RdfResource value) {
     add(key, value);
   }
 
 
+  /**
+   * Add pre-specified resource mappings. The resources should be blank nodes.
+   *
+   * @param nameMappings the name mappings
+   */
   public void addResourceMappings(Map<RdfResource, RdfResource> nameMappings) {
     for (Map.Entry<RdfResource, RdfResource> entry : nameMappings.entrySet()) {
       add(entry.getKey(), entry.getValue());

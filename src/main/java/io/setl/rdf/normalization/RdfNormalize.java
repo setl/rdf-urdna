@@ -34,6 +34,22 @@ public class RdfNormalize {
    */
   private static final char[] HEX = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
+  /** The maximum number of permutations to process within Hash N-Degree Quads. */
+  private static int defaultMaxPermutations = 100_000;
+
+  /** The maximum time to run the normalization process. */
+  private static int defaultMaxRunTimeMs = 100_000;
+
+
+  private static int getDefaultMaxPermutations() {
+    return defaultMaxPermutations;
+  }
+
+
+  public static int getDefaultMaxRunTimeMs() {
+    return defaultMaxRunTimeMs;
+  }
+
 
   /**
    * Convert bytes to hexadecimal.
@@ -48,18 +64,6 @@ public class RdfNormalize {
       builder.append(HEX[(b & 0xf0) >> 4]).append(HEX[b & 0xf]);
     }
     return builder.toString();
-  }
-
-
-  /**
-   * Normalize an RDF dataset using the URDNA 2015 algorithm.
-   *
-   * @param input the dataset to be normalized
-   *
-   * @return a new normalized equivalent dataset.
-   */
-  public static RdfDataset normalize(RdfDataset input) {
-    return new RdfNormalize(input, null).doNormalize();
   }
 
 
@@ -105,6 +109,18 @@ public class RdfNormalize {
 
 
   /**
+   * Normalize an RDF dataset using the URDNA 2015 algorithm.
+   *
+   * @param input the dataset to be normalized
+   *
+   * @return a new normalized equivalent dataset.
+   */
+  public static RdfDataset normalize(RdfDataset input) {
+    return new RdfNormalize(input, null).doNormalize();
+  }
+
+
+  /**
    * Normalize an RDF dataset using the specified algorithm. NB. Currently only "URDNA2015" is supported.
    *
    * @param input     the dataset to be normalized
@@ -124,6 +140,16 @@ public class RdfNormalize {
     }
 
     throw new NoSuchAlgorithmException("Normalization algorithm is not supported:" + algorithm);
+  }
+
+
+  public static void setDefaultMaxPermutations(int defaultMaxPermutations) {
+    RdfNormalize.defaultMaxPermutations = defaultMaxPermutations;
+  }
+
+
+  public static void setDefaultMaxRunTimeMs(int defaultMaxRunTimeMs) {
+    RdfNormalize.defaultMaxRunTimeMs = defaultMaxRunTimeMs;
   }
 
 
@@ -197,12 +223,20 @@ public class RdfNormalize {
      * @param issuer      the identifier issuer
      */
     private void doPermutation(RdfResource[] permutation, IdentifierIssuer issuer) {
+      // Check runtime
+      if (totalPermutationsRemaining-- <= 0 || System.currentTimeMillis() > maxRunTime) {
+        throw new MaxResourceExceeded("Exceeded maximum number of permutations allowed");
+      }
+      if (System.currentTimeMillis() > maxRunTime) {
+        throw new MaxResourceExceeded("Exceeded maximum computation time allowed");
+      }
+
       // 5.4.1 to 5.4.3 : initialise variables
       IdentifierIssuer issuerCopy = issuer.copy();
       StringBuilder pathBuilder = new StringBuilder();
       List<RdfResource> recursionList = new ArrayList<>();
 
-      // 5.4.4: for every resource in the this permutation of the resources
+      // 5.4.4: for every resource in this permutation of the resources
       for (RdfResource related : permutation) {
         appendToPath(related, pathBuilder, issuerCopy, recursionList);
 
@@ -333,8 +367,14 @@ public class RdfNormalize {
   /** An instance of the SHA-256 message digest algorithm. */
   private final MessageDigest sha256;
 
+  /** The maximum time to run the normalization process. */
+  private long maxRunTime;
+
   /** A set of non-normalized values. */
   private HashSet<RdfValue> nonNormalized;
+
+  /** The number of permutations remaining. */
+  private int totalPermutationsRemaining;
 
 
   private RdfNormalize(RdfDataset input, InputMappings mappings) {
@@ -350,6 +390,9 @@ public class RdfNormalize {
 
 
   private RdfDataset doNormalize() {
+    totalPermutationsRemaining = defaultMaxPermutations;
+    maxRunTime = System.currentTimeMillis() + defaultMaxRunTimeMs;
+
     // Step 1 is done by the constructor.
     // Step 2:
     findBlankNodes();

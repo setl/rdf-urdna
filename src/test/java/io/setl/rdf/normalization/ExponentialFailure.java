@@ -19,6 +19,8 @@ public class ExponentialFailure {
 
   public static void main(String[] args) throws Exception {
     System.out.println("This program does not terminate! Use CTRL+C or equivalent to stop it.\n\n");
+    RdfNormalize.setDefaultMaxPermutations(Integer.MAX_VALUE);
+    RdfNormalize.setDefaultMaxRunTimeMs(Integer.MAX_VALUE);
 
     int size = 1;
     ArrayList<RdfResource> links = new ArrayList<>();
@@ -39,7 +41,7 @@ public class ExponentialFailure {
 
       long start = System.currentTimeMillis();
       System.out.println("Normalizing data set of " + size + " nodes.");
-      for(RdfTriple triple : rdfDataset.getDefaultGraph().toList()) {
+      for (RdfTriple triple : rdfDataset.getDefaultGraph().toList()) {
         System.out.print(NQuadSerializer.write(triple.getSubject(), triple.getPredicate(), triple.getObject(), Optional.empty()));
       }
       System.out.println();
