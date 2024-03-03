@@ -3,12 +3,8 @@ buildscript {
     //Allow local repository for snapshot builds
     if (version.endsWith("SNAPSHOT")) {
       mavenLocal()
-      mavenCentral()
     }
-    maven {
-      url "http://si-nexus01.dev.setl.io:8081/repository/maven-public/"
-      allowInsecureProtocol = true
-    }
+    mavenCentral()
   }
   dependencies {
     classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
@@ -43,12 +39,8 @@ repositories {
   //Allow local repository for snapshot builds
   if (version.endsWith("SNAPSHOT")) {
     mavenLocal()
-    mavenCentral()
   }
-  maven {
-    url "http://si-nexus01.dev.setl.io:8081/repository/maven-public/"
-    allowInsecureProtocol = true
-  }
+  mavenCentral()
 }
 
 dependencies {

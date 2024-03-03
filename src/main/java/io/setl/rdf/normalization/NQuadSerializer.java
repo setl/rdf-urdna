@@ -14,7 +14,7 @@ import com.apicatalog.rdf.lang.XsdConstants;
  * IRIs, so no processing of percent encoding in the IRIs is performed.
  *
  * @author Simon Greatrix on 06/10/2020.
- * @see <a href="https://www.w3.org/TR/n-quads/">RDF 1.1. N-Quads</a>.
+ * @see <a href="https://www.w3.org/TR/n-quads/"> RDF 1.1. N-Quads </a>.
  */
 
 public class NQuadSerializer {
