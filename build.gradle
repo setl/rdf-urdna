@@ -73,28 +73,6 @@ artifacts {
 }
 
 
-// Publishing
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from components.java
-    }
-  }
-  repositories {
-    maven {
-      credentials {
-        username = "$mavenUser"
-        password = "$mavenPassword"
-      }
-      if (version.endsWith("SNAPSHOT")) {
-        url 'http://si-nexus01.dev.setl.io:8081/repository/setl-snaps'
-      } else {
-        url 'http://si-nexus01.dev.setl.io:8081/repository/setl-libs'
-      }
-    }
-  }
-}
-
 // Upload to Maven Central
 uploadArchives {
   repositories {
