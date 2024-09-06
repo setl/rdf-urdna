@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-  implementation group: 'com.apicatalog', name: 'titanium-json-ld-jre8', version: '1.4.0'
+  implementation group: 'com.apicatalog', name: 'titanium-json-ld-jre8', version: '1.4.1'
 
   testImplementation group: 'junit', name: 'junit', version: '4.12'
   testImplementation group: 'jakarta.json', name: 'jakarta.json-api', version: '2.0.1'

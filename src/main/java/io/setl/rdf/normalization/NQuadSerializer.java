@@ -94,8 +94,9 @@ public class NQuadSerializer {
         return;
       }
 
-      builder.append("^^");
+      builder.append("^^<");
       writeIri(builder, literal.getDatatype());
+      builder.append('>');
     }
   }
 
